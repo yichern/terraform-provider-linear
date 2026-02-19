@@ -146,7 +146,7 @@ func (r *TeamResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: "Key of the team.",
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(5),
+					stringvalidator.UTF8LengthAtMost(10),
 					stringvalidator.RegexMatches(regexp.MustCompile("^[A-Z0-9]+$"), "must only contain uppercase letters and numbers"),
 				},
 			},
@@ -182,7 +182,7 @@ func (r *TeamResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile("^[a-zA-Z]+$"), "must only contain letters"),
+					stringvalidator.RegexMatches(regexp.MustCompile("^[a-zA-Z0-9]+$"), "must only contain letters and numbers"),
 				},
 			},
 			"color": schema.StringAttribute{
