@@ -36,6 +36,7 @@ func NewTeamResource() resource.Resource {
 
 type TeamResource struct {
 	client *graphql.Client
+	cache  *BulkCache
 }
 
 type TeamResourceTriageModel struct {
@@ -681,18 +682,19 @@ func (r *TeamResource) Configure(ctx context.Context, req resource.ConfigureRequ
 		return
 	}
 
-	client, ok := req.ProviderData.(*graphql.Client)
+	providerData, ok := req.ProviderData.(*ProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *graphql.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ProviderData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = &providerData.Client
+	r.cache = &providerData.Cache
 }
 
 func (r *TeamResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -852,14 +854,12 @@ func (r *TeamResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	response, err := getTeam(ctx, *r.client, data.Key.ValueString())
+	team, err := r.cache.GetTeamByKey(ctx, data.Key.ValueString())
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read team, got error: %s", err))
 		return
 	}
-
-	team := response.Team
 
 	data.Id = types.StringValue(team.Id)
 	data.Name = types.StringValue(team.Name)
@@ -919,7 +919,7 @@ func (r *TeamResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		},
 	)
 
-	workflowStatesResponse, workflowStatesErr := getTeamWorkflowStates(ctx, *r.client, team.Key)
+	workflowStates, workflowStatesErr := r.cache.GetWorkflowStatesByTeamID(ctx, team.Id)
 
 	if workflowStatesErr != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to get team workflow states, got error: %s", workflowStatesErr))
@@ -928,22 +928,22 @@ func (r *TeamResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	tflog.Trace(ctx, "read team workflow states")
 
-	backlogWorkflowState := findWorkflowStateType(workflowStatesResponse.WorkflowStates.Nodes, "backlog")
-	unstartedWorkflowState := findWorkflowStateType(workflowStatesResponse.WorkflowStates.Nodes, "unstarted")
-	startedWorkflowState := findWorkflowStateType(workflowStatesResponse.WorkflowStates.Nodes, "started")
-	completedWorkflowState := findWorkflowStateType(workflowStatesResponse.WorkflowStates.Nodes, "completed")
-	canceledWorkflowState := findWorkflowStateType(workflowStatesResponse.WorkflowStates.Nodes, "canceled")
+	backlogWorkflowState := findWorkflowStateTypeFromCache(workflowStates, "backlog")
+	unstartedWorkflowState := findWorkflowStateTypeFromCache(workflowStates, "unstarted")
+	startedWorkflowState := findWorkflowStateTypeFromCache(workflowStates, "started")
+	completedWorkflowState := findWorkflowStateTypeFromCache(workflowStates, "completed")
+	canceledWorkflowState := findWorkflowStateTypeFromCache(workflowStates, "canceled")
 
 	if backlogWorkflowState == nil || unstartedWorkflowState == nil || startedWorkflowState == nil || completedWorkflowState == nil || canceledWorkflowState == nil {
 		resp.Diagnostics.AddError("Client Error", "Unable to find all workflow states when reading team")
 		return
 	}
 
-	data.BacklogWorkflowState = readWorkflowStateToObject(*backlogWorkflowState)
-	data.UnstartedWorkflowState = readWorkflowStateToObject(*unstartedWorkflowState)
-	data.StartedWorkflowState = readWorkflowStateToObject(*startedWorkflowState)
-	data.CompletedWorkflowState = readWorkflowStateToObject(*completedWorkflowState)
-	data.CanceledWorkflowState = readWorkflowStateToObject(*canceledWorkflowState)
+	data.BacklogWorkflowState = workflowStateFragmentToObject(*backlogWorkflowState)
+	data.UnstartedWorkflowState = workflowStateFragmentToObject(*unstartedWorkflowState)
+	data.StartedWorkflowState = workflowStateFragmentToObject(*startedWorkflowState)
+	data.CompletedWorkflowState = workflowStateFragmentToObject(*completedWorkflowState)
+	data.CanceledWorkflowState = workflowStateFragmentToObject(*canceledWorkflowState)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -1192,7 +1192,28 @@ func findWorkflowStateType(workflowStates []getTeamWorkflowStatesWorkflowStatesW
 	return nil
 }
 
-func readWorkflowStateToObject(workflowState getTeamWorkflowStatesWorkflowStatesWorkflowStateConnectionNodesWorkflowState) types.Object {
+func findWorkflowStateTypeFromCache(workflowStates []WorkflowState, ty string) *WorkflowState {
+	for _, workflowState := range workflowStates {
+		if workflowState.Type == ty && workflowState.Position == 0 {
+			return &workflowState
+		}
+	}
+
+	// If unable to find the exact workflow with the exact position, return the first one with the correct type
+	sort.Slice(workflowStates, func(i, j int) bool {
+		return workflowStates[i].Position < workflowStates[j].Position
+	})
+
+	for _, workflowState := range workflowStates {
+		if workflowState.Type == ty {
+			return &workflowState
+		}
+	}
+
+	return nil
+}
+
+func workflowStateFragmentToObject(workflowState WorkflowState) types.Object {
 	return types.ObjectValueMust(
 		workflowStateAttrTypes,
 		map[string]attr.Value{

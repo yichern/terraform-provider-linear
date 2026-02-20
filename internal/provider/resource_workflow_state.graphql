@@ -25,6 +25,14 @@ query getTeamWorkflowStates($key: String!) {
   }
 }
 
+query listAllWorkflowStates {
+  workflowStates(first: 250) {
+    nodes {
+      ...WorkflowState
+    }
+  }
+}
+
 query getWorkflowState($id: String!) {
   workflowState(id: $id) {
     ...WorkflowState

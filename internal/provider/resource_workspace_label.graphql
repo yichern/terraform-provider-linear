@@ -22,6 +22,14 @@ query getLabel($id: String!) {
   }
 }
 
+query listAllLabels {
+  issueLabels(first: 250) {
+    nodes {
+      ...IssueLabel
+    }
+  }
+}
+
 query findWorkspaceLabel($name: String!) {
   issueLabels(filter: {
     name: {

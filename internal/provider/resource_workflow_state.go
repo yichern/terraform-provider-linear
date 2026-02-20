@@ -27,6 +27,7 @@ func NewWorkflowStateResource() resource.Resource {
 
 type WorkflowStateResource struct {
 	client *graphql.Client
+	cache  *BulkCache
 }
 
 type WorkflowStateResourceModel struct {
@@ -106,18 +107,19 @@ func (r *WorkflowStateResource) Configure(ctx context.Context, req resource.Conf
 		return
 	}
 
-	client, ok := req.ProviderData.(*graphql.Client)
+	providerData, ok := req.ProviderData.(*ProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *graphql.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ProviderData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = &providerData.Client
+	r.cache = &providerData.Cache
 }
 
 func (r *WorkflowStateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -174,7 +176,7 @@ func (r *WorkflowStateResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
-	response, err := getWorkflowState(ctx, *r.client, data.Id.ValueString())
+	workflowState, err := r.cache.GetWorkflowState(ctx, data.Id.ValueString())
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read workflow state, got error: %s", err))
@@ -182,8 +184,6 @@ func (r *WorkflowStateResource) Read(ctx context.Context, req resource.ReadReque
 	}
 
 	tflog.Trace(ctx, "read a workflow state")
-
-	workflowState := response.WorkflowState
 
 	data.Name = types.StringValue(workflowState.Name)
 	data.Type = types.StringValue(workflowState.Type)

@@ -93,8 +93,13 @@ func (p *LinearProvider) Configure(ctx context.Context, req provider.ConfigureRe
 
 	client := graphql.NewClient("https://api.linear.app/graphql", &httpClient)
 
-	resp.DataSourceData = &client
-	resp.ResourceData = &client
+	providerData := &ProviderData{
+		Client: client,
+		Cache:  newBulkCache(client),
+	}
+
+	resp.DataSourceData = providerData
+	resp.ResourceData = providerData
 }
 
 func (p *LinearProvider) Resources(ctx context.Context) []func() resource.Resource {

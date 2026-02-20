@@ -9148,6 +9148,9 @@ input IssueLabelUpdateInput {
 
   """The color of the label."""
   color: String
+
+  """Whether the label is a group."""
+  isGroup: Boolean
 }
 
 """An issue related notification."""

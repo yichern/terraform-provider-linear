@@ -44,6 +44,14 @@ query getTeam($key: String!) {
   }
 }
 
+query listAllTeams {
+  teams(first: 250) {
+    nodes {
+      ...Team
+    }
+  }
+}
+
 # @genqlient(for: "TeamCreateInput.id", omitempty: true)
 # @genqlient(for: "TeamCreateInput.description", pointer: true)
 # @genqlient(for: "TeamCreateInput.icon", omitempty: true, pointer: true)
