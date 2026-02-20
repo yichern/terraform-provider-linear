@@ -156,7 +156,11 @@ func (r *WorkflowStateResource) Create(ctx context.Context, req resource.CreateR
 	data.Type = types.StringValue(workflowState.Type)
 	data.Position = types.NumberValue(big.NewFloat(workflowState.Position))
 	data.Color = types.StringValue(workflowState.Color)
-	data.Description = types.StringPointerValue(workflowState.Description)
+	if workflowState.Description != nil {
+		data.Description = types.StringValue(*workflowState.Description)
+	} else {
+		data.Description = types.StringValue("")
+	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -186,7 +190,11 @@ func (r *WorkflowStateResource) Read(ctx context.Context, req resource.ReadReque
 	data.Position = types.NumberValue(big.NewFloat(workflowState.Position))
 	data.Color = types.StringValue(workflowState.Color)
 	data.TeamId = types.StringValue(workflowState.Team.Id)
-	data.Description = types.StringPointerValue(workflowState.Description)
+	if workflowState.Description != nil {
+		data.Description = types.StringValue(*workflowState.Description)
+	} else {
+		data.Description = types.StringValue("")
+	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -223,7 +231,11 @@ func (r *WorkflowStateResource) Update(ctx context.Context, req resource.UpdateR
 	data.Name = types.StringValue(workflowState.Name)
 	data.Position = types.NumberValue(big.NewFloat(workflowState.Position))
 	data.Color = types.StringValue(workflowState.Color)
-	data.Description = types.StringPointerValue(workflowState.Description)
+	if workflowState.Description != nil {
+		data.Description = types.StringValue(*workflowState.Description)
+	} else {
+		data.Description = types.StringValue("")
+	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

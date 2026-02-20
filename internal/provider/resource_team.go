@@ -1267,7 +1267,20 @@ func updateTeamWorkflowStateInUpdate(ctx context.Context, r *TeamResource, data 
 		return nil
 	}
 
-	ret := updateWorkflowStateToObject(workflowStateResponse.WorkflowStateUpdate.WorkflowState)
+	ws := workflowStateResponse.WorkflowStateUpdate.WorkflowState
+
+	// Preserve position from plan data — the API response returns 0 for position
+	// on workflow state updates that don't change position, causing inconsistent results.
+	ret := types.ObjectValueMust(
+		workflowStateAttrTypes,
+		map[string]attr.Value{
+			"id":          types.StringValue(ws.Id),
+			"position":    workflowStateData.Position,
+			"name":        types.StringValue(ws.Name),
+			"color":       types.StringValue(ws.Color),
+			"description": types.StringPointerValue(ws.Description),
+		},
+	)
 
 	return &ret
 }
