@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -32,6 +33,7 @@ type WorkspaceLabelResourceModel struct {
 	Name        types.String `tfsdk:"name"`
 	Description types.String `tfsdk:"description"`
 	Color       types.String `tfsdk:"color"`
+	IsGroup     types.Bool   `tfsdk:"is_group"`
 	ParentId    types.String `tfsdk:"parent_id"`
 }
 
@@ -71,6 +73,12 @@ func (r *WorkspaceLabelResource) Schema(ctx context.Context, req resource.Schema
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(colorRegex(), "must be a hex color"),
 				},
+			},
+			"is_group": schema.BoolAttribute{
+				MarkdownDescription: "Whether the label is a group.",
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(false),
 			},
 			"parent_id": schema.StringAttribute{
 				MarkdownDescription: "Parent (label group) of the label.",
@@ -116,6 +124,7 @@ func (r *WorkspaceLabelResource) Create(ctx context.Context, req resource.Create
 		Name:        data.Name.ValueString(),
 		Description: data.Description.ValueStringPointer(),
 		ParentId:    data.ParentId.ValueStringPointer(),
+		IsGroup:     data.IsGroup.ValueBool(),
 	}
 
 	if !data.Color.IsUnknown() {
@@ -138,6 +147,7 @@ func (r *WorkspaceLabelResource) Create(ctx context.Context, req resource.Create
 	data.Name = types.StringValue(issueLabel.Name)
 	data.Description = types.StringPointerValue(issueLabel.Description)
 	data.Color = types.StringPointerValue(issueLabel.Color)
+	data.IsGroup = types.BoolValue(issueLabel.IsGroup)
 
 	if issueLabel.Parent != nil {
 		data.ParentId = types.StringValue(issueLabel.Parent.Id)
@@ -168,6 +178,7 @@ func (r *WorkspaceLabelResource) Read(ctx context.Context, req resource.ReadRequ
 	data.Name = types.StringValue(issueLabel.Name)
 	data.Description = types.StringPointerValue(issueLabel.Description)
 	data.Color = types.StringPointerValue(issueLabel.Color)
+	data.IsGroup = types.BoolValue(issueLabel.IsGroup)
 
 	if issueLabel.Parent != nil {
 		data.ParentId = types.StringValue(issueLabel.Parent.Id)
@@ -211,6 +222,7 @@ func (r *WorkspaceLabelResource) Update(ctx context.Context, req resource.Update
 	data.Name = types.StringValue(issueLabel.Name)
 	data.Description = types.StringPointerValue(issueLabel.Description)
 	data.Color = types.StringPointerValue(issueLabel.Color)
+	data.IsGroup = types.BoolValue(issueLabel.IsGroup)
 
 	if issueLabel.Parent != nil {
 		data.ParentId = types.StringValue(issueLabel.Parent.Id)
