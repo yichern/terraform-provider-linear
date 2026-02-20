@@ -225,6 +225,8 @@ type IssueLabelUpdateInput struct {
 	ParentId *string `json:"parentId"`
 	// The color of the label.
 	Color *string `json:"color,omitempty"`
+	// Whether this label is a group.
+	IsGroup bool `json:"isGroup,omitempty"`
 }
 
 // GetName returns IssueLabelUpdateInput.Name, and is useful for accessing the field via an interface.
@@ -238,6 +240,9 @@ func (v *IssueLabelUpdateInput) GetParentId() *string { return v.ParentId }
 
 // GetColor returns IssueLabelUpdateInput.Color, and is useful for accessing the field via an interface.
 func (v *IssueLabelUpdateInput) GetColor() *string { return v.Color }
+
+// GetIsGroup returns IssueLabelUpdateInput.IsGroup, and is useful for accessing the field via an interface.
+func (v *IssueLabelUpdateInput) GetIsGroup() bool { return v.IsGroup }
 
 // Organization includes the GraphQL fields of Organization requested by the fragment Organization.
 // The GraphQL type's documentation follows.

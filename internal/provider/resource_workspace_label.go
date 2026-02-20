@@ -200,6 +200,7 @@ func (r *WorkspaceLabelResource) Update(ctx context.Context, req resource.Update
 		Name:        data.Name.ValueString(),
 		Description: data.Description.ValueStringPointer(),
 		ParentId:    data.ParentId.ValueStringPointer(),
+		IsGroup:     data.IsGroup.ValueBool(),
 	}
 
 	if !data.Color.IsUnknown() {

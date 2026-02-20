@@ -56,6 +56,7 @@ mutation createLabel(
 # @genqlient(for: "IssueLabelUpdateInput.description", pointer: true)
 # @genqlient(for: "IssueLabelUpdateInput.color", omitempty: true, pointer: true)
 # @genqlient(for: "IssueLabelUpdateInput.parentId", pointer: true)
+# @genqlient(for: "IssueLabelUpdateInput.isGroup", omitempty: true)
 mutation updateLabel(
   $input: IssueLabelUpdateInput!,
   $id: String!
