@@ -43,15 +43,22 @@ func newBulkCache(client graphql.Client) BulkCache {
 func (c *BulkCache) ensureLabels(ctx context.Context) {
 	c.labelsOnce.Do(func() {
 		tflog.Debug(ctx, "bulk fetching all issue labels")
-		resp, err := listAllLabels(ctx, c.client)
-		if err != nil {
-			c.labelsErr = err
-			return
-		}
-		c.labels = make(map[string]*IssueLabel, len(resp.IssueLabels.Nodes))
-		for _, node := range resp.IssueLabels.Nodes {
-			label := node.IssueLabel
-			c.labels[label.Id] = &label
+		c.labels = make(map[string]*IssueLabel)
+		var cursor *string
+		for {
+			resp, err := listAllLabelsPage(ctx, c.client, cursor)
+			if err != nil {
+				c.labelsErr = err
+				return
+			}
+			for _, node := range resp.IssueLabels.Nodes {
+				label := node.IssueLabel
+				c.labels[label.Id] = &label
+			}
+			if !resp.IssueLabels.PageInfo.HasNextPage {
+				break
+			}
+			cursor = &resp.IssueLabels.PageInfo.EndCursor
 		}
 		tflog.Debug(ctx, fmt.Sprintf("bulk fetched %d issue labels", len(c.labels)))
 	})
@@ -72,15 +79,22 @@ func (c *BulkCache) GetLabel(ctx context.Context, id string) (*IssueLabel, error
 func (c *BulkCache) ensureWorkflowStates(ctx context.Context) {
 	c.workflowStatesOnce.Do(func() {
 		tflog.Debug(ctx, "bulk fetching all workflow states")
-		resp, err := listAllWorkflowStates(ctx, c.client)
-		if err != nil {
-			c.workflowStatesErr = err
-			return
-		}
-		c.workflowStates = make(map[string]*WorkflowState, len(resp.WorkflowStates.Nodes))
-		for _, node := range resp.WorkflowStates.Nodes {
-			ws := node.WorkflowState
-			c.workflowStates[ws.Id] = &ws
+		c.workflowStates = make(map[string]*WorkflowState)
+		var cursor *string
+		for {
+			resp, err := listAllWorkflowStatesPage(ctx, c.client, cursor)
+			if err != nil {
+				c.workflowStatesErr = err
+				return
+			}
+			for _, node := range resp.WorkflowStates.Nodes {
+				ws := node.WorkflowState
+				c.workflowStates[ws.Id] = &ws
+			}
+			if !resp.WorkflowStates.PageInfo.HasNextPage {
+				break
+			}
+			cursor = &resp.WorkflowStates.PageInfo.EndCursor
 		}
 		tflog.Debug(ctx, fmt.Sprintf("bulk fetched %d workflow states", len(c.workflowStates)))
 	})
@@ -144,15 +158,22 @@ func (c *BulkCache) GetTemplate(ctx context.Context, id string) (*Template, erro
 func (c *BulkCache) ensureTeams(ctx context.Context) {
 	c.teamsOnce.Do(func() {
 		tflog.Debug(ctx, "bulk fetching all teams")
-		resp, err := listAllTeams(ctx, c.client)
-		if err != nil {
-			c.teamsErr = err
-			return
-		}
-		c.teamsByKey = make(map[string]*Team, len(resp.Teams.Nodes))
-		for _, node := range resp.Teams.Nodes {
-			team := node.Team
-			c.teamsByKey[team.Key] = &team
+		c.teamsByKey = make(map[string]*Team)
+		var cursor *string
+		for {
+			resp, err := listAllTeamsPage(ctx, c.client, cursor)
+			if err != nil {
+				c.teamsErr = err
+				return
+			}
+			for _, node := range resp.Teams.Nodes {
+				team := node.Team
+				c.teamsByKey[team.Key] = &team
+			}
+			if !resp.Teams.PageInfo.HasNextPage {
+				break
+			}
+			cursor = &resp.Teams.PageInfo.EndCursor
 		}
 		tflog.Debug(ctx, fmt.Sprintf("bulk fetched %d teams", len(c.teamsByKey)))
 	})

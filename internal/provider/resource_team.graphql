@@ -44,10 +44,17 @@ query getTeam($key: String!) {
   }
 }
 
-query listAllTeams {
-  teams(first: 250) {
+query listAllTeamsPage(
+  # @genqlient(pointer: true)
+  $after: String
+) {
+  teams(first: 250, after: $after) {
     nodes {
       ...Team
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
     }
   }
 }

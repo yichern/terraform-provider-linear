@@ -22,10 +22,17 @@ query getLabel($id: String!) {
   }
 }
 
-query listAllLabels {
-  issueLabels(first: 250) {
+query listAllLabelsPage(
+  # @genqlient(pointer: true)
+  $after: String
+) {
+  issueLabels(first: 250, after: $after) {
     nodes {
       ...IssueLabel
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
     }
   }
 }
