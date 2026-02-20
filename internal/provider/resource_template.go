@@ -26,6 +26,7 @@ func NewTemplateResource() resource.Resource {
 
 type TemplateResource struct {
 	client *graphql.Client
+	cache  *BulkCache
 }
 
 type TemplateResourceModel struct {
@@ -96,18 +97,19 @@ func (r *TemplateResource) Configure(ctx context.Context, req resource.Configure
 		return
 	}
 
-	client, ok := req.ProviderData.(*graphql.Client)
+	providerData, ok := req.ProviderData.(*ProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *graphql.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ProviderData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = &providerData.Client
+	r.cache = &providerData.Cache
 }
 
 func (r *TemplateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -154,7 +156,6 @@ func (r *TemplateResource) Create(ctx context.Context, req resource.CreateReques
 }
 
 func (r *TemplateResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-
 	var data *TemplateResourceModel
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
@@ -163,14 +164,12 @@ func (r *TemplateResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	response, err := getTemplate(ctx, *r.client, data.Id.ValueString())
+	template, err := r.cache.GetTemplate(ctx, data.Id.ValueString())
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read template, got error: %s", err))
 		return
 	}
-
-	template := response.Template
 
 	data.Id = types.StringValue(template.Id)
 	data.Name = types.StringValue(template.Name)

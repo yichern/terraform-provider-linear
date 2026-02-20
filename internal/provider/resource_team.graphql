@@ -44,6 +44,21 @@ query getTeam($key: String!) {
   }
 }
 
+query listAllTeamsPage(
+  # @genqlient(pointer: true)
+  $after: String
+) {
+  teams(first: 250, after: $after) {
+    nodes {
+      ...Team
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
 # @genqlient(for: "TeamCreateInput.id", omitempty: true)
 # @genqlient(for: "TeamCreateInput.description", pointer: true)
 # @genqlient(for: "TeamCreateInput.icon", omitempty: true, pointer: true)

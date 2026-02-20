@@ -17,6 +17,12 @@ query getTemplate($id: String!) {
   }
 }
 
+query listAllTemplates {
+  templates {
+    ...Template
+  }
+}
+
 # @genqlient(for: "TemplateCreateInput.id", omitempty: true, pointer: true)
 # @genqlient(for: "TemplateCreateInput.description", pointer: true)
 # @genqlient(for: "TemplateCreateInput.teamId", pointer: true)

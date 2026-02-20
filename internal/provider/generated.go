@@ -225,7 +225,7 @@ type IssueLabelUpdateInput struct {
 	ParentId *string `json:"parentId"`
 	// The color of the label.
 	Color *string `json:"color,omitempty"`
-	// Whether this label is a group.
+	// Whether the label is a group.
 	IsGroup bool `json:"isGroup,omitempty"`
 }
 
@@ -1691,6 +1691,30 @@ type __getWorkflowStateInput struct {
 
 // GetId returns __getWorkflowStateInput.Id, and is useful for accessing the field via an interface.
 func (v *__getWorkflowStateInput) GetId() string { return v.Id }
+
+// __listAllLabelsPageInput is used internally by genqlient
+type __listAllLabelsPageInput struct {
+	After *string `json:"after"`
+}
+
+// GetAfter returns __listAllLabelsPageInput.After, and is useful for accessing the field via an interface.
+func (v *__listAllLabelsPageInput) GetAfter() *string { return v.After }
+
+// __listAllTeamsPageInput is used internally by genqlient
+type __listAllTeamsPageInput struct {
+	After *string `json:"after"`
+}
+
+// GetAfter returns __listAllTeamsPageInput.After, and is useful for accessing the field via an interface.
+func (v *__listAllTeamsPageInput) GetAfter() *string { return v.After }
+
+// __listAllWorkflowStatesPageInput is used internally by genqlient
+type __listAllWorkflowStatesPageInput struct {
+	After *string `json:"after"`
+}
+
+// GetAfter returns __listAllWorkflowStatesPageInput.After, and is useful for accessing the field via an interface.
+func (v *__listAllWorkflowStatesPageInput) GetAfter() *string { return v.After }
 
 // __templateCreateInput is used internally by genqlient
 type __templateCreateInput struct {
@@ -3604,6 +3628,718 @@ func (v *getWorkspaceSettingsResponse) GetOrganization() getWorkspaceSettingsOrg
 	return v.Organization
 }
 
+// listAllLabelsPageIssueLabelsIssueLabelConnection includes the requested fields of the GraphQL type IssueLabelConnection.
+type listAllLabelsPageIssueLabelsIssueLabelConnection struct {
+	Nodes    []listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel `json:"nodes"`
+	PageInfo listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo          `json:"pageInfo"`
+}
+
+// GetNodes returns listAllLabelsPageIssueLabelsIssueLabelConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnection) GetNodes() []listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel {
+	return v.Nodes
+}
+
+// GetPageInfo returns listAllLabelsPageIssueLabelsIssueLabelConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnection) GetPageInfo() listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo {
+	return v.PageInfo
+}
+
+// listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel includes the requested fields of the GraphQL type IssueLabel.
+// The GraphQL type's documentation follows.
+//
+// Labels that can be associated with issues.
+type listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel struct {
+	IssueLabel `json:"-"`
+}
+
+// GetId returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.Id, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetId() string {
+	return v.IssueLabel.Id
+}
+
+// GetName returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.Name, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetName() string {
+	return v.IssueLabel.Name
+}
+
+// GetDescription returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.Description, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetDescription() *string {
+	return v.IssueLabel.Description
+}
+
+// GetColor returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.Color, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetColor() *string {
+	return v.IssueLabel.Color
+}
+
+// GetIsGroup returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.IsGroup, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetIsGroup() bool {
+	return v.IssueLabel.IsGroup
+}
+
+// GetParent returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.Parent, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetParent() *IssueLabelParentIssueLabel {
+	return v.IssueLabel.Parent
+}
+
+// GetTeam returns listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel.Team, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) GetTeam() *IssueLabelTeam {
+	return v.IssueLabel.Team
+}
+
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.IssueLabel)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshallistAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Description *string `json:"description"`
+
+	Color *string `json:"color"`
+
+	IsGroup bool `json:"isGroup"`
+
+	Parent *IssueLabelParentIssueLabel `json:"parent"`
+
+	Team *IssueLabelTeam `json:"team"`
+}
+
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel) __premarshalJSON() (*__premarshallistAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel, error) {
+	var retval __premarshallistAllLabelsPageIssueLabelsIssueLabelConnectionNodesIssueLabel
+
+	retval.Id = v.IssueLabel.Id
+	retval.Name = v.IssueLabel.Name
+	retval.Description = v.IssueLabel.Description
+	retval.Color = v.IssueLabel.Color
+	retval.IsGroup = v.IssueLabel.IsGroup
+	retval.Parent = v.IssueLabel.Parent
+	retval.Team = v.IssueLabel.Team
+	return &retval, nil
+}
+
+// listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo includes the requested fields of the GraphQL type PageInfo.
+type listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo struct {
+	// Indicates if there are more results when paginating forward.
+	HasNextPage bool `json:"hasNextPage"`
+	// Cursor representing the last result in the paginated results.
+	EndCursor string `json:"endCursor"`
+}
+
+// GetHasNextPage returns listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo.HasNextPage, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo) GetHasNextPage() bool {
+	return v.HasNextPage
+}
+
+// GetEndCursor returns listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo.EndCursor, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageIssueLabelsIssueLabelConnectionPageInfo) GetEndCursor() string {
+	return v.EndCursor
+}
+
+// listAllLabelsPageResponse is returned by listAllLabelsPage on success.
+type listAllLabelsPageResponse struct {
+	// All issue labels.
+	IssueLabels listAllLabelsPageIssueLabelsIssueLabelConnection `json:"issueLabels"`
+}
+
+// GetIssueLabels returns listAllLabelsPageResponse.IssueLabels, and is useful for accessing the field via an interface.
+func (v *listAllLabelsPageResponse) GetIssueLabels() listAllLabelsPageIssueLabelsIssueLabelConnection {
+	return v.IssueLabels
+}
+
+// listAllTeamsPageResponse is returned by listAllTeamsPage on success.
+type listAllTeamsPageResponse struct {
+	// All teams whose issues can be accessed by the user. This might be different
+	// from `administrableTeams`, which also includes teams whose settings can be
+	// changed by the user.
+	Teams listAllTeamsPageTeamsTeamConnection `json:"teams"`
+}
+
+// GetTeams returns listAllTeamsPageResponse.Teams, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageResponse) GetTeams() listAllTeamsPageTeamsTeamConnection { return v.Teams }
+
+// listAllTeamsPageTeamsTeamConnection includes the requested fields of the GraphQL type TeamConnection.
+type listAllTeamsPageTeamsTeamConnection struct {
+	Nodes    []listAllTeamsPageTeamsTeamConnectionNodesTeam `json:"nodes"`
+	PageInfo listAllTeamsPageTeamsTeamConnectionPageInfo    `json:"pageInfo"`
+}
+
+// GetNodes returns listAllTeamsPageTeamsTeamConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnection) GetNodes() []listAllTeamsPageTeamsTeamConnectionNodesTeam {
+	return v.Nodes
+}
+
+// GetPageInfo returns listAllTeamsPageTeamsTeamConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnection) GetPageInfo() listAllTeamsPageTeamsTeamConnectionPageInfo {
+	return v.PageInfo
+}
+
+// listAllTeamsPageTeamsTeamConnectionNodesTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// An organizational unit that contains issues.
+type listAllTeamsPageTeamsTeamConnectionNodesTeam struct {
+	Team `json:"-"`
+}
+
+// GetId returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Id, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetId() string { return v.Team.Id }
+
+// GetName returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Name, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetName() string { return v.Team.Name }
+
+// GetKey returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Key, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetKey() string { return v.Team.Key }
+
+// GetPrivate returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Private, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetPrivate() bool { return v.Team.Private }
+
+// GetDescription returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Description, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetDescription() *string {
+	return v.Team.Description
+}
+
+// GetIcon returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Icon, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetIcon() *string { return v.Team.Icon }
+
+// GetColor returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Color, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetColor() *string { return v.Team.Color }
+
+// GetParent returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Parent, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetParent() *TeamParentTeam {
+	return v.Team.Parent
+}
+
+// GetTimezone returns listAllTeamsPageTeamsTeamConnectionNodesTeam.Timezone, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetTimezone() string { return v.Team.Timezone }
+
+// GetGroupIssueHistory returns listAllTeamsPageTeamsTeamConnectionNodesTeam.GroupIssueHistory, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetGroupIssueHistory() bool {
+	return v.Team.GroupIssueHistory
+}
+
+// GetSetIssueSortOrderOnStateChange returns listAllTeamsPageTeamsTeamConnectionNodesTeam.SetIssueSortOrderOnStateChange, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetSetIssueSortOrderOnStateChange() string {
+	return v.Team.SetIssueSortOrderOnStateChange
+}
+
+// GetAiThreadSummariesEnabled returns listAllTeamsPageTeamsTeamConnectionNodesTeam.AiThreadSummariesEnabled, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetAiThreadSummariesEnabled() bool {
+	return v.Team.AiThreadSummariesEnabled
+}
+
+// GetAutoArchivePeriod returns listAllTeamsPageTeamsTeamConnectionNodesTeam.AutoArchivePeriod, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetAutoArchivePeriod() float64 {
+	return v.Team.AutoArchivePeriod
+}
+
+// GetAutoClosePeriod returns listAllTeamsPageTeamsTeamConnectionNodesTeam.AutoClosePeriod, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetAutoClosePeriod() *float64 {
+	return v.Team.AutoClosePeriod
+}
+
+// GetAutoCloseParentIssues returns listAllTeamsPageTeamsTeamConnectionNodesTeam.AutoCloseParentIssues, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetAutoCloseParentIssues() bool {
+	return v.Team.AutoCloseParentIssues
+}
+
+// GetAutoCloseChildIssues returns listAllTeamsPageTeamsTeamConnectionNodesTeam.AutoCloseChildIssues, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetAutoCloseChildIssues() bool {
+	return v.Team.AutoCloseChildIssues
+}
+
+// GetTriageEnabled returns listAllTeamsPageTeamsTeamConnectionNodesTeam.TriageEnabled, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetTriageEnabled() bool {
+	return v.Team.TriageEnabled
+}
+
+// GetRequirePriorityToLeaveTriage returns listAllTeamsPageTeamsTeamConnectionNodesTeam.RequirePriorityToLeaveTriage, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetRequirePriorityToLeaveTriage() bool {
+	return v.Team.RequirePriorityToLeaveTriage
+}
+
+// GetCyclesEnabled returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CyclesEnabled, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCyclesEnabled() bool {
+	return v.Team.CyclesEnabled
+}
+
+// GetCycleStartDay returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CycleStartDay, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCycleStartDay() float64 {
+	return v.Team.CycleStartDay
+}
+
+// GetCycleDuration returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CycleDuration, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCycleDuration() float64 {
+	return v.Team.CycleDuration
+}
+
+// GetCycleCooldownTime returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CycleCooldownTime, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCycleCooldownTime() float64 {
+	return v.Team.CycleCooldownTime
+}
+
+// GetUpcomingCycleCount returns listAllTeamsPageTeamsTeamConnectionNodesTeam.UpcomingCycleCount, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetUpcomingCycleCount() float64 {
+	return v.Team.UpcomingCycleCount
+}
+
+// GetCycleIssueAutoAssignStarted returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CycleIssueAutoAssignStarted, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCycleIssueAutoAssignStarted() bool {
+	return v.Team.CycleIssueAutoAssignStarted
+}
+
+// GetCycleIssueAutoAssignCompleted returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CycleIssueAutoAssignCompleted, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCycleIssueAutoAssignCompleted() bool {
+	return v.Team.CycleIssueAutoAssignCompleted
+}
+
+// GetCycleLockToActive returns listAllTeamsPageTeamsTeamConnectionNodesTeam.CycleLockToActive, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetCycleLockToActive() bool {
+	return v.Team.CycleLockToActive
+}
+
+// GetIssueEstimationType returns listAllTeamsPageTeamsTeamConnectionNodesTeam.IssueEstimationType, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetIssueEstimationType() string {
+	return v.Team.IssueEstimationType
+}
+
+// GetIssueEstimationAllowZero returns listAllTeamsPageTeamsTeamConnectionNodesTeam.IssueEstimationAllowZero, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetIssueEstimationAllowZero() bool {
+	return v.Team.IssueEstimationAllowZero
+}
+
+// GetIssueEstimationExtended returns listAllTeamsPageTeamsTeamConnectionNodesTeam.IssueEstimationExtended, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetIssueEstimationExtended() bool {
+	return v.Team.IssueEstimationExtended
+}
+
+// GetDefaultIssueEstimate returns listAllTeamsPageTeamsTeamConnectionNodesTeam.DefaultIssueEstimate, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) GetDefaultIssueEstimate() float64 {
+	return v.Team.DefaultIssueEstimate
+}
+
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*listAllTeamsPageTeamsTeamConnectionNodesTeam
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.listAllTeamsPageTeamsTeamConnectionNodesTeam = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.Team)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshallistAllTeamsPageTeamsTeamConnectionNodesTeam struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Key string `json:"key"`
+
+	Private bool `json:"private"`
+
+	Description *string `json:"description"`
+
+	Icon *string `json:"icon"`
+
+	Color *string `json:"color"`
+
+	Parent *TeamParentTeam `json:"parent"`
+
+	Timezone string `json:"timezone"`
+
+	GroupIssueHistory bool `json:"groupIssueHistory"`
+
+	SetIssueSortOrderOnStateChange string `json:"setIssueSortOrderOnStateChange"`
+
+	AiThreadSummariesEnabled bool `json:"aiThreadSummariesEnabled"`
+
+	AutoArchivePeriod float64 `json:"autoArchivePeriod"`
+
+	AutoClosePeriod *float64 `json:"autoClosePeriod"`
+
+	AutoCloseParentIssues bool `json:"autoCloseParentIssues"`
+
+	AutoCloseChildIssues bool `json:"autoCloseChildIssues"`
+
+	TriageEnabled bool `json:"triageEnabled"`
+
+	RequirePriorityToLeaveTriage bool `json:"requirePriorityToLeaveTriage"`
+
+	CyclesEnabled bool `json:"cyclesEnabled"`
+
+	CycleStartDay float64 `json:"cycleStartDay"`
+
+	CycleDuration float64 `json:"cycleDuration"`
+
+	CycleCooldownTime float64 `json:"cycleCooldownTime"`
+
+	UpcomingCycleCount float64 `json:"upcomingCycleCount"`
+
+	CycleIssueAutoAssignStarted bool `json:"cycleIssueAutoAssignStarted"`
+
+	CycleIssueAutoAssignCompleted bool `json:"cycleIssueAutoAssignCompleted"`
+
+	CycleLockToActive bool `json:"cycleLockToActive"`
+
+	IssueEstimationType string `json:"issueEstimationType"`
+
+	IssueEstimationAllowZero bool `json:"issueEstimationAllowZero"`
+
+	IssueEstimationExtended bool `json:"issueEstimationExtended"`
+
+	DefaultIssueEstimate float64 `json:"defaultIssueEstimate"`
+}
+
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *listAllTeamsPageTeamsTeamConnectionNodesTeam) __premarshalJSON() (*__premarshallistAllTeamsPageTeamsTeamConnectionNodesTeam, error) {
+	var retval __premarshallistAllTeamsPageTeamsTeamConnectionNodesTeam
+
+	retval.Id = v.Team.Id
+	retval.Name = v.Team.Name
+	retval.Key = v.Team.Key
+	retval.Private = v.Team.Private
+	retval.Description = v.Team.Description
+	retval.Icon = v.Team.Icon
+	retval.Color = v.Team.Color
+	retval.Parent = v.Team.Parent
+	retval.Timezone = v.Team.Timezone
+	retval.GroupIssueHistory = v.Team.GroupIssueHistory
+	retval.SetIssueSortOrderOnStateChange = v.Team.SetIssueSortOrderOnStateChange
+	retval.AiThreadSummariesEnabled = v.Team.AiThreadSummariesEnabled
+	retval.AutoArchivePeriod = v.Team.AutoArchivePeriod
+	retval.AutoClosePeriod = v.Team.AutoClosePeriod
+	retval.AutoCloseParentIssues = v.Team.AutoCloseParentIssues
+	retval.AutoCloseChildIssues = v.Team.AutoCloseChildIssues
+	retval.TriageEnabled = v.Team.TriageEnabled
+	retval.RequirePriorityToLeaveTriage = v.Team.RequirePriorityToLeaveTriage
+	retval.CyclesEnabled = v.Team.CyclesEnabled
+	retval.CycleStartDay = v.Team.CycleStartDay
+	retval.CycleDuration = v.Team.CycleDuration
+	retval.CycleCooldownTime = v.Team.CycleCooldownTime
+	retval.UpcomingCycleCount = v.Team.UpcomingCycleCount
+	retval.CycleIssueAutoAssignStarted = v.Team.CycleIssueAutoAssignStarted
+	retval.CycleIssueAutoAssignCompleted = v.Team.CycleIssueAutoAssignCompleted
+	retval.CycleLockToActive = v.Team.CycleLockToActive
+	retval.IssueEstimationType = v.Team.IssueEstimationType
+	retval.IssueEstimationAllowZero = v.Team.IssueEstimationAllowZero
+	retval.IssueEstimationExtended = v.Team.IssueEstimationExtended
+	retval.DefaultIssueEstimate = v.Team.DefaultIssueEstimate
+	return &retval, nil
+}
+
+// listAllTeamsPageTeamsTeamConnectionPageInfo includes the requested fields of the GraphQL type PageInfo.
+type listAllTeamsPageTeamsTeamConnectionPageInfo struct {
+	// Indicates if there are more results when paginating forward.
+	HasNextPage bool `json:"hasNextPage"`
+	// Cursor representing the last result in the paginated results.
+	EndCursor string `json:"endCursor"`
+}
+
+// GetHasNextPage returns listAllTeamsPageTeamsTeamConnectionPageInfo.HasNextPage, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionPageInfo) GetHasNextPage() bool { return v.HasNextPage }
+
+// GetEndCursor returns listAllTeamsPageTeamsTeamConnectionPageInfo.EndCursor, and is useful for accessing the field via an interface.
+func (v *listAllTeamsPageTeamsTeamConnectionPageInfo) GetEndCursor() string { return v.EndCursor }
+
+// listAllTemplatesResponse is returned by listAllTemplates on success.
+type listAllTemplatesResponse struct {
+	// All templates from all users.
+	Templates []listAllTemplatesTemplatesTemplate `json:"templates"`
+}
+
+// GetTemplates returns listAllTemplatesResponse.Templates, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesResponse) GetTemplates() []listAllTemplatesTemplatesTemplate {
+	return v.Templates
+}
+
+// listAllTemplatesTemplatesTemplate includes the requested fields of the GraphQL type Template.
+// The GraphQL type's documentation follows.
+//
+// A template object used for creating entities faster.
+type listAllTemplatesTemplatesTemplate struct {
+	Template `json:"-"`
+}
+
+// GetId returns listAllTemplatesTemplatesTemplate.Id, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesTemplatesTemplate) GetId() string { return v.Template.Id }
+
+// GetName returns listAllTemplatesTemplatesTemplate.Name, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesTemplatesTemplate) GetName() string { return v.Template.Name }
+
+// GetDescription returns listAllTemplatesTemplatesTemplate.Description, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesTemplatesTemplate) GetDescription() *string { return v.Template.Description }
+
+// GetType returns listAllTemplatesTemplatesTemplate.Type, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesTemplatesTemplate) GetType() string { return v.Template.Type }
+
+// GetTeam returns listAllTemplatesTemplatesTemplate.Team, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesTemplatesTemplate) GetTeam() *TemplateTeam { return v.Template.Team }
+
+// GetTemplateData returns listAllTemplatesTemplatesTemplate.TemplateData, and is useful for accessing the field via an interface.
+func (v *listAllTemplatesTemplatesTemplate) GetTemplateData() string { return v.Template.TemplateData }
+
+func (v *listAllTemplatesTemplatesTemplate) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*listAllTemplatesTemplatesTemplate
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.listAllTemplatesTemplatesTemplate = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.Template)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshallistAllTemplatesTemplatesTemplate struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Description *string `json:"description"`
+
+	Type string `json:"type"`
+
+	Team *TemplateTeam `json:"team"`
+
+	TemplateData string `json:"templateData"`
+}
+
+func (v *listAllTemplatesTemplatesTemplate) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *listAllTemplatesTemplatesTemplate) __premarshalJSON() (*__premarshallistAllTemplatesTemplatesTemplate, error) {
+	var retval __premarshallistAllTemplatesTemplatesTemplate
+
+	retval.Id = v.Template.Id
+	retval.Name = v.Template.Name
+	retval.Description = v.Template.Description
+	retval.Type = v.Template.Type
+	retval.Team = v.Template.Team
+	retval.TemplateData = v.Template.TemplateData
+	return &retval, nil
+}
+
+// listAllWorkflowStatesPageResponse is returned by listAllWorkflowStatesPage on success.
+type listAllWorkflowStatesPageResponse struct {
+	// All issue workflow states.
+	WorkflowStates listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection `json:"workflowStates"`
+}
+
+// GetWorkflowStates returns listAllWorkflowStatesPageResponse.WorkflowStates, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageResponse) GetWorkflowStates() listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection {
+	return v.WorkflowStates
+}
+
+// listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection includes the requested fields of the GraphQL type WorkflowStateConnection.
+type listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection struct {
+	Nodes    []listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState `json:"nodes"`
+	PageInfo listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo             `json:"pageInfo"`
+}
+
+// GetNodes returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection) GetNodes() []listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState {
+	return v.Nodes
+}
+
+// GetPageInfo returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnection) GetPageInfo() listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo {
+	return v.PageInfo
+}
+
+// listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState includes the requested fields of the GraphQL type WorkflowState.
+// The GraphQL type's documentation follows.
+//
+// A state in a team workflow.
+type listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState struct {
+	WorkflowState `json:"-"`
+}
+
+// GetId returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Id, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetId() string {
+	return v.WorkflowState.Id
+}
+
+// GetName returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Name, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetName() string {
+	return v.WorkflowState.Name
+}
+
+// GetColor returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Color, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetColor() string {
+	return v.WorkflowState.Color
+}
+
+// GetDescription returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Description, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetDescription() *string {
+	return v.WorkflowState.Description
+}
+
+// GetType returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Type, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetType() string {
+	return v.WorkflowState.Type
+}
+
+// GetPosition returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Position, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetPosition() float64 {
+	return v.WorkflowState.Position
+}
+
+// GetTeam returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState.Team, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) GetTeam() WorkflowStateTeam {
+	return v.WorkflowState.Team
+}
+
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.WorkflowState)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshallistAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState struct {
+	Id string `json:"id"`
+
+	Name string `json:"name"`
+
+	Color string `json:"color"`
+
+	Description *string `json:"description"`
+
+	Type string `json:"type"`
+
+	Position float64 `json:"position"`
+
+	Team WorkflowStateTeam `json:"team"`
+}
+
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState) __premarshalJSON() (*__premarshallistAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState, error) {
+	var retval __premarshallistAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionNodesWorkflowState
+
+	retval.Id = v.WorkflowState.Id
+	retval.Name = v.WorkflowState.Name
+	retval.Color = v.WorkflowState.Color
+	retval.Description = v.WorkflowState.Description
+	retval.Type = v.WorkflowState.Type
+	retval.Position = v.WorkflowState.Position
+	retval.Team = v.WorkflowState.Team
+	return &retval, nil
+}
+
+// listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo includes the requested fields of the GraphQL type PageInfo.
+type listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo struct {
+	// Indicates if there are more results when paginating forward.
+	HasNextPage bool `json:"hasNextPage"`
+	// Cursor representing the last result in the paginated results.
+	EndCursor string `json:"endCursor"`
+}
+
+// GetHasNextPage returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo.HasNextPage, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo) GetHasNextPage() bool {
+	return v.HasNextPage
+}
+
+// GetEndCursor returns listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo.EndCursor, and is useful for accessing the field via an interface.
+func (v *listAllWorkflowStatesPageWorkflowStatesWorkflowStateConnectionPageInfo) GetEndCursor() string {
+	return v.EndCursor
+}
+
 // templateCreateResponse is returned by templateCreate on success.
 type templateCreateResponse struct {
 	// Creates a new template.
@@ -5482,6 +6218,216 @@ fragment Organization on Organization {
 	var err error
 
 	var data getWorkspaceSettingsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func listAllLabelsPage(
+	ctx context.Context,
+	client graphql.Client,
+	after *string,
+) (*listAllLabelsPageResponse, error) {
+	req := &graphql.Request{
+		OpName: "listAllLabelsPage",
+		Query: `
+query listAllLabelsPage ($after: String) {
+	issueLabels(first: 250, after: $after) {
+		nodes {
+			... IssueLabel
+		}
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+	}
+}
+fragment IssueLabel on IssueLabel {
+	id
+	name
+	description
+	color
+	isGroup
+	parent {
+		id
+	}
+	team {
+		id
+	}
+}
+`,
+		Variables: &__listAllLabelsPageInput{
+			After: after,
+		},
+	}
+	var err error
+
+	var data listAllLabelsPageResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func listAllTeamsPage(
+	ctx context.Context,
+	client graphql.Client,
+	after *string,
+) (*listAllTeamsPageResponse, error) {
+	req := &graphql.Request{
+		OpName: "listAllTeamsPage",
+		Query: `
+query listAllTeamsPage ($after: String) {
+	teams(first: 250, after: $after) {
+		nodes {
+			... Team
+		}
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+	}
+}
+fragment Team on Team {
+	id
+	name
+	key
+	private
+	description
+	icon
+	color
+	parent {
+		id
+	}
+	timezone
+	groupIssueHistory
+	setIssueSortOrderOnStateChange
+	aiThreadSummariesEnabled
+	autoArchivePeriod
+	autoClosePeriod
+	autoCloseParentIssues
+	autoCloseChildIssues
+	triageEnabled
+	requirePriorityToLeaveTriage
+	cyclesEnabled
+	cycleStartDay
+	cycleDuration
+	cycleCooldownTime
+	upcomingCycleCount
+	cycleIssueAutoAssignStarted
+	cycleIssueAutoAssignCompleted
+	cycleLockToActive
+	issueEstimationType
+	issueEstimationAllowZero
+	issueEstimationExtended
+	defaultIssueEstimate
+}
+`,
+		Variables: &__listAllTeamsPageInput{
+			After: after,
+		},
+	}
+	var err error
+
+	var data listAllTeamsPageResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func listAllTemplates(
+	ctx context.Context,
+	client graphql.Client,
+) (*listAllTemplatesResponse, error) {
+	req := &graphql.Request{
+		OpName: "listAllTemplates",
+		Query: `
+query listAllTemplates {
+	templates {
+		... Template
+	}
+}
+fragment Template on Template {
+	id
+	name
+	description
+	type
+	team {
+		id
+	}
+	templateData
+}
+`,
+	}
+	var err error
+
+	var data listAllTemplatesResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func listAllWorkflowStatesPage(
+	ctx context.Context,
+	client graphql.Client,
+	after *string,
+) (*listAllWorkflowStatesPageResponse, error) {
+	req := &graphql.Request{
+		OpName: "listAllWorkflowStatesPage",
+		Query: `
+query listAllWorkflowStatesPage ($after: String) {
+	workflowStates(first: 250, after: $after) {
+		nodes {
+			... WorkflowState
+		}
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+	}
+}
+fragment WorkflowState on WorkflowState {
+	id
+	name
+	color
+	description
+	type
+	position
+	team {
+		id
+	}
+}
+`,
+		Variables: &__listAllWorkflowStatesPageInput{
+			After: after,
+		},
+	}
+	var err error
+
+	var data listAllWorkflowStatesPageResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

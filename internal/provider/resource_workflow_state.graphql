@@ -25,6 +25,21 @@ query getTeamWorkflowStates($key: String!) {
   }
 }
 
+query listAllWorkflowStatesPage(
+  # @genqlient(pointer: true)
+  $after: String
+) {
+  workflowStates(first: 250, after: $after) {
+    nodes {
+      ...WorkflowState
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
 query getWorkflowState($id: String!) {
   workflowState(id: $id) {
     ...WorkflowState

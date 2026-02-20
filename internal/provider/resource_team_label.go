@@ -26,6 +26,7 @@ func NewTeamLabelResource() resource.Resource {
 
 type TeamLabelResource struct {
 	client *graphql.Client
+	cache  *BulkCache
 }
 
 type TeamLabelResourceModel struct {
@@ -101,18 +102,19 @@ func (r *TeamLabelResource) Configure(ctx context.Context, req resource.Configur
 		return
 	}
 
-	client, ok := req.ProviderData.(*graphql.Client)
+	providerData, ok := req.ProviderData.(*ProviderData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *graphql.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ProviderData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
 	}
 
-	r.client = client
+	r.client = &providerData.Client
+	r.cache = &providerData.Cache
 }
 
 func (r *TeamLabelResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -172,14 +174,12 @@ func (r *TeamLabelResource) Read(ctx context.Context, req resource.ReadRequest, 
 		return
 	}
 
-	response, err := getLabel(ctx, *r.client, data.Id.ValueString())
+	issueLabel, err := r.cache.GetLabel(ctx, data.Id.ValueString())
 
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read team label, got error: %s", err))
 		return
 	}
-
-	issueLabel := response.IssueLabel
 
 	data.Id = types.StringValue(issueLabel.Id)
 	data.Name = types.StringValue(issueLabel.Name)
