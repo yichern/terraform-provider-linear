@@ -4716,6 +4716,7 @@ fragment IssueLabel on IssueLabel {
 	name
 	description
 	color
+	isGroup
 	parent {
 		id
 	}
@@ -5142,6 +5143,7 @@ fragment IssueLabel on IssueLabel {
 	name
 	description
 	color
+	isGroup
 	parent {
 		id
 	}
@@ -5668,6 +5670,7 @@ fragment IssueLabel on IssueLabel {
 	name
 	description
 	color
+	isGroup
 	parent {
 		id
 	}
